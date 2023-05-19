@@ -57,11 +57,13 @@ def choisir_mouvement_bot_aleatoire(echiquier):
 
 
 def dessiner_piece(screen, piece, x, y):
-    piece_color = (220, 220, 220) if piece.color == chess.WHITE else (30, 30, 30)
+    piece_color = (
+        220, 220, 220) if piece.color == chess.WHITE else (30, 30, 30)
     piece_type = piece.piece_type
 
     if piece_type == chess.PAWN:
-        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE // 2, y + TAILLE_CASE // 2), TAILLE_CASE // 4)
+        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE //
+                           2, y + TAILLE_CASE // 2), TAILLE_CASE // 4)
     elif piece_type == chess.KNIGHT:
         pygame.draw.polygon(
             screen,
@@ -82,17 +84,24 @@ def dessiner_piece(screen, piece, x, y):
                 (x + 3 * TAILLE_CASE // 4, y + 3 * TAILLE_CASE // 4),
             ],
         )
-        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE // 2, y + TAILLE_CASE // 4), TAILLE_CASE // 6)
-        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE // 2, y + TAILLE_CASE // 2), TAILLE_CASE // 8)
+        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE //
+                           2, y + TAILLE_CASE // 4), TAILLE_CASE // 6)
+        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE //
+                           2, y + TAILLE_CASE // 2), TAILLE_CASE // 8)
     elif piece_type == chess.KING:
-        pygame.draw.rect(screen, piece_color, (x + TAILLE_CASE // 4, y + TAILLE_CASE // 4, TAILLE_CASE // 2, TAILLE_CASE // 2))
-        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE // 2, y + TAILLE_CASE // 4), TAILLE_CASE // 8)
-        pygame.draw.line(screen, piece_color, (x + TAILLE_CASE // 2, y + TAILLE_CASE // 4), (x + TAILLE_CASE // 2, y + TAILLE_CASE // 8), 2)
+        pygame.draw.rect(screen, piece_color, (x + TAILLE_CASE // 4,
+                         y + TAILLE_CASE // 4, TAILLE_CASE // 2, TAILLE_CASE // 2))
+        pygame.draw.circle(screen, piece_color, (x + TAILLE_CASE //
+                           2, y + TAILLE_CASE // 4), TAILLE_CASE // 8)
+        pygame.draw.line(screen, piece_color, (x + TAILLE_CASE // 2, y +
+                         TAILLE_CASE // 4), (x + TAILLE_CASE // 2, y + TAILLE_CASE // 8), 2)
+
 
 def afficher_echiquier(screen, echiquier):
     for r in range(8):
         for c in range(8):
-            rect = pygame.Rect(c * TAILLE_CASE, r * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE)
+            rect = pygame.Rect(c * TAILLE_CASE, r *
+                               TAILLE_CASE, TAILLE_CASE, TAILLE_CASE)
             pygame.draw.rect(screen, BLANC if (r + c) % 2 == 0 else NOIR, rect)
 
             piece_square = 8 * (7 - r) + c
@@ -101,9 +110,11 @@ def afficher_echiquier(screen, echiquier):
                 if piece:
                     dessiner_piece(screen, piece, rect.x, rect.y)
 
+
 def coordonnees_pixel_vers_case(pos):
     x, y = pos
     return x // TAILLE_CASE, y // TAILLE_CASE
+
 
 def afficher_resultat(manager, resultat):
     message = ""
@@ -117,12 +128,16 @@ def afficher_resultat(manager, resultat):
         message = "Erreur : résultat inattendu."
 
     if message:
-        resultat_dialog = UIConfirmationDialog(rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 100, TAILLE_ECHIQUIER // 2 - 50), (200, 100)), manager=manager, window_title="Résultat", action_long_desc=message, blocking=True)
-        restart_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 50, TAILLE_ECHIQUIER // 2 + 20), (100, 30)), text="Redémarrer", manager=manager)
+        resultat_dialog = UIConfirmationDialog(rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 100, TAILLE_ECHIQUIER // 2 - 50),
+                                               (200, 100)), manager=manager, window_title="Résultat", action_long_desc=message, blocking=True)
+        restart_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+            (TAILLE_ECHIQUIER // 2 - 50, TAILLE_ECHIQUIER // 2 + 20), (100, 30)), text="Redémarrer", manager=manager)
         return restart_button
 
+
 def main():
-    screen = pygame.display.set_mode((TAILLE_ECHIQUIER + 200, TAILLE_ECHIQUIER))
+    screen = pygame.display.set_mode(
+        (TAILLE_ECHIQUIER + 200, TAILLE_ECHIQUIER))
     pygame.display.set_caption("Jeu d'échecs")
 
     echiquier = chess.Board()
@@ -149,7 +164,8 @@ def main():
             mouvement_bot = choisir_mouvement_bot(echiquier, profondeur)
             echiquier.push(mouvement_bot)
             if echiquier.is_game_over():
-                restart_result_button = afficher_resultat(manager, echiquier.result())
+                restart_result_button = afficher_resultat(
+                    manager, echiquier.result())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -161,10 +177,12 @@ def main():
             if event.type == pygame.USEREVENT:
                 if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                     if event.ui_element == difficulty_dropdown:
-                        restart_dialog = UIConfirmationDialog(rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 100, TAILLE_ECHIQUIER // 2 - 50), (200, 100)), manager=manager, window_title="Confirmation", action_long_desc="Voulez-vous redémarrer la partie avec le nouveau niveau de difficulté ?", blocking=True)
+                        restart_dialog = UIConfirmationDialog(rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 100, TAILLE_ECHIQUIER // 2 - 50), (200, 100)), manager=manager,
+                                                              window_title="Confirmation", action_long_desc="Voulez-vous redémarrer la partie avec le nouveau niveau de difficulté ?", blocking=True)
                 elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == restart_button:
-                        restart_dialog = UIConfirmationDialog(rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 100, TAILLE_ECHIQUIER // 2 - 50), (200, 100)), manager=manager, window_title="Confirmation", action_long_desc="Voulez-vous redémarrer la partie ?", blocking=True)
+                        restart_dialog = UIConfirmationDialog(rect=pygame.Rect((TAILLE_ECHIQUIER // 2 - 100, TAILLE_ECHIQUIER // 2 - 50), (
+                            200, 100)), manager=manager, window_title="Confirmation", action_long_desc="Voulez-vous redémarrer la partie ?", blocking=True)
                     elif event.ui_element == restart_result_button:
                         echiquier = chess.Board()
                         restart_result_button.kill()
@@ -182,13 +200,15 @@ def main():
                         if piece_selectionnee == (x, y):
                             piece_selectionnee = None
                         else:
-                            mouvement = chess.Move.from_uci(chess.square_name(8 * (7 - piece_selectionnee[1]) + piece_selectionnee[0]) + chess.square_name(8 * (7 - y) + x))
+                            mouvement = chess.Move.from_uci(chess.square_name(
+                                8 * (7 - piece_selectionnee[1]) + piece_selectionnee[0]) + chess.square_name(8 * (7 - y) + x))
 
                             if mouvement in echiquier.legal_moves:
                                 echiquier.push(mouvement)
                                 piece_selectionnee = None
                                 if echiquier.is_game_over():
-                                    restart_result_button = afficher_resultat(manager, echiquier.result())
+                                    restart_result_button = afficher_resultat(
+                                        manager, echiquier.result())
                             elif echiquier.piece_at(8 * (7 - y) + x) and echiquier.color_at(8 * (7 - y) + x) == echiquier.turn:
                                 piece_selectionnee = (x, y)
                     else:
@@ -202,6 +222,7 @@ def main():
         pygame.display.flip()
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
